@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@eballoi/react-use-polling": "^1.1.0",
+    "contentful": "^10.6.4",
     "framer-motion": "^11.0.5",
     "next": "14.1.0",
     "react": "^18",

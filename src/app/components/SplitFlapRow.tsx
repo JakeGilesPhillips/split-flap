@@ -6,7 +6,7 @@ interface SplitFlapRowProps extends SplitFlapCharacterProps {
   length?: number;
 }
 const SplitFlapRow = (props: SplitFlapRowProps) => {
-  const { word = "TEST", length = 10, height = 100 } = props;
+  const { word = "TEST", length = 10 } = props;
   const row: string[] = useMemo(() => {
     return new Array(length).fill('');
   }, [length]);

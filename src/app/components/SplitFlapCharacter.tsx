@@ -2,16 +2,18 @@
 "use client"
 import { useAnimate, motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { CharacterType } from "../contentful/routes/SplitFlapEntry";
 
 export interface SplitFlapCharacterProps {
   targetChar?: string;
   speed1?: number;
   speed2?: number;
   height?: number;
-  type?: 'ALPHABET' | 'NUMERIC' | 'ALPHANUMERIC';
+  fontSize?: number;
+  type?: CharacterType;
 }
 
-const SplitFlapCharacter = ({ targetChar = "A", speed1 = 0.1, speed2 = 0.3, height = 100, type = 'ALPHANUMERIC' }: SplitFlapCharacterProps) => {
+const SplitFlapCharacter = ({ targetChar = "A", speed1 = 0.1, speed2 = 0.3, height = 50, fontSize = 28, type = 'ALPHANUMERIC' }: SplitFlapCharacterProps) => {
   const symbols = ["", ":", "&"];
   const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
   const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
@@ -48,7 +50,7 @@ const SplitFlapCharacter = ({ targetChar = "A", speed1 = 0.1, speed2 = 0.3, heig
   }, [targetChar, newChar]);
 
   return (
-    <div className="relative bg-zinc-900 aspect-[9/14] text-white text-[4em]" style={{ height }}>
+    <div className="relative bg-zinc-900 aspect-[9/14] text-white" style={{ height, fontSize }}>
       <div id="TOP" className="absolute h-full w-full flex justify-center items-start" style={{ perspective: '-200px' }}>
         <motion.div id="TOP-FRONT" className="absolute w-full h-full z-10 will-change-transform" ref={oldFlap} style={{ transform: 'rotateX(0deg)' }}>
           <div className="relative h-[50%] w-full bg-zinc-800 flex justify-start items-start overflow-hidden">
