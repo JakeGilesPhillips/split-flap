@@ -1,3 +1,5 @@
+export const revalidate = 0;
+
 import SplitFlapBoard from "./components/SplitFlapBoard";
 import { fetchSettings } from "./contentful/routes/Settings";
 
