@@ -13,6 +13,7 @@ export interface Settings {
 	logoWidth?: number;
 	rowHeight?: number;
 	rowFontSize?: number;
+	scale?: number;
 }
 
 export const DefaultSettings: Settings = {
@@ -24,6 +25,7 @@ export const DefaultSettings: Settings = {
 	logoWidth: 80,
 	rowHeight: 100,
 	rowFontSize: 28,
+	scale: 1,
 }
 
 export const parseContentfulSettings = (settings: TypeSettingsEntry): Settings | null => {
@@ -38,6 +40,7 @@ export const parseContentfulSettings = (settings: TypeSettingsEntry): Settings |
 		logoWidth: settings?.fields?.logoWidth ?? DefaultSettings.logoWidth,
 		rowHeight: settings?.fields?.rowHeight ?? DefaultSettings.rowHeight,
 		rowFontSize: settings?.fields?.rowFontSize ?? DefaultSettings.rowFontSize,
+		scale: settings?.fields?.scale ?? DefaultSettings.scale
 	};
 };
 

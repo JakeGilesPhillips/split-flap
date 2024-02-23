@@ -32,7 +32,7 @@ const SplitFlapBoard = ({ initialSettings }: SplitFlapBoardProps) => {
   }, [data])
 
   return (
-    <div className="flex flex-col bg-zinc-900 px-6 pb-8 pt-4 overflow-hidden rounded-xl">
+    <div className="flex flex-col bg-zinc-900 px-6 pb-8 pt-4 overflow-hidden rounded-xl" style={{ scale: settings.scale }}>
       <div className="flex flex-row justify-start items-center w-full px-3 py-6">
         <div className="flex flex-col mr-4 overflow-hidden rounded-lg">
           <Image src={Logo} alt="" width={settings?.logoWidth} height={settings?.logoWidth} />

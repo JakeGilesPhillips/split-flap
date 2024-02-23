@@ -11,6 +11,7 @@ export interface TypeSettingsFields {
 	logoWidth?: EntryFieldTypes.Integer;
 	rowHeight?: EntryFieldTypes.Integer;
 	rowFontSize?: EntryFieldTypes.Integer;
+	scale?: EntryFieldTypes.Number;
 }
 
 export type SettingsType = "settings";
