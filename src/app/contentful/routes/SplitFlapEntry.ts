@@ -1,16 +1,15 @@
 import { TypeSplitFlapEntryEntry } from "../types/TypeSplitFlapEntry";
-import { EmptyTextElement, TextElement, parseContentfulTextElement } from "./SplitFlapColumn";
-
-export type CharacterType = 'ALPHABET' | 'NUMERIC' | 'ALPHANUMERIC';
 
 export interface SplitFlapEntry {
   text?: string;
   columnId?: number;
+  color?: string;
 }
 
 export const EmptySplitFlapEntry: SplitFlapEntry = {
   text: "",
-  columnId: 0
+  columnId: 0,
+  color: '',
 }
 
 export const parseContentfulSplitFlapEntry = (splitFlapEntry?: TypeSplitFlapEntryEntry | any): SplitFlapEntry | null => {
@@ -19,6 +18,7 @@ export const parseContentfulSplitFlapEntry = (splitFlapEntry?: TypeSplitFlapEntr
 	return {
     text: splitFlapEntry?.fields?.text ?? "",
     columnId: splitFlapEntry?.fields?.columnId || 0,
+    color: splitFlapEntry?.fields?.color || '',
 	};
 };
 

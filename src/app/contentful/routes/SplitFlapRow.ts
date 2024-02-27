@@ -2,21 +2,24 @@ import { TypeSplitFlapRowEntry } from "../types/TypeSplitFlapRow";
 import { SplitFlapEntry, parseContentfulSplitFlapEntrys } from "./SplitFlapEntry";
 
 export interface SplitFlapRow {
-  order: number;
+  rowName?: string;
   columns?: SplitFlapEntry[];
+  order: number;
 }
 
 export const EmptySplitFlapRow: SplitFlapRow = {
-  order: 0,
+  rowName: "",
   columns: [],
+  order: 0,
 }
 
 export const parseContentfulSplitFlapRow = (splitFlapRow?: TypeSplitFlapRowEntry): SplitFlapRow | null => {
 	if (!splitFlapRow) return null;
 
 	return {
-    order: splitFlapRow?.fields?.order ?? 0,
+    rowName: splitFlapRow?.fields?.rowName ?? "",
     columns: parseContentfulSplitFlapEntrys(splitFlapRow?.fields?.columns) ?? [],
+    order: splitFlapRow?.fields?.order ?? 0,
 	};
 };
 

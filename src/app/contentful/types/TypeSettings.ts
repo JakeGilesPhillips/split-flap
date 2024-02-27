@@ -3,6 +3,7 @@ import { TypeTextElementSkeleton } from "./TypeSplitFlapColumn";
 import { TypeSplitFlapRowSkeleton } from "./TypeSplitFlapRow";
 
 export interface TypeSettingsFields {
+	name?: EntryFieldTypes.Text;
 	title?: EntryFieldTypes.EntryLink<TypeTextElementSkeleton>
 	columns?: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<TypeTextElementSkeleton>>;
 	rows?: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<TypeSplitFlapRowSkeleton>>;

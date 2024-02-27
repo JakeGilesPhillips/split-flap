@@ -6,19 +6,19 @@ import usePolling from "@eballoi/react-use-polling";
 import Logo from '../../../public/logo.png';
 import SplitFlapRow from "../components/SplitFlapRow";
 import { Settings } from "../contentful/routes/Settings";
-import { ParseJson } from "../helpers/ResponseHelper";
 import { GetColumnsFromRowByID } from "../helpers/DataHelper";
+import { ParseJson, fetchSettings } from "../helpers/ServerHelper";
 
 interface SplitFlapBoardProps {
   initialSettings: Settings;
 }
 
 const SplitFlapBoard = ({ initialSettings }: SplitFlapBoardProps) => {
-  const [settings, setSettings] = useState(initialSettings);
+  const [settings, setSettings] = useState<Settings>(initialSettings);
 
   // Configure fetch function
   const fetchData = async (): Promise<Settings> => {
-    const res = await fetch("/api/settings");
+    const res = await fetchSettings('departures');
     return ParseJson(res);
   }
 
@@ -29,7 +29,7 @@ const SplitFlapBoard = ({ initialSettings }: SplitFlapBoardProps) => {
   useEffect(() => {
     if (!data) return;
     setSettings(data);
-  }, [data])
+  }, [data]);
 
   return (
     <div className="flex flex-col bg-zinc-900 px-6 pb-8 pt-4 overflow-hidden rounded-xl" style={{ scale: settings.scale }}>
@@ -45,9 +45,12 @@ const SplitFlapBoard = ({ initialSettings }: SplitFlapBoardProps) => {
           return (
             <div key={i} className="flex flex-col justify-center items-start gap-2 p-2">
               <span className="text-white" style={{ fontSize: col.fontSize }}>{col.text}</span>
-              {rows?.map((row, j) => (
-                <SplitFlapRow key={i * j} word={row.text} length={col.characters} speed1={settings.initialSpeed} speed2={settings.finalSpeed} height={settings.rowHeight} fontSize={settings.rowFontSize} type={col.type} />
-              ))}
+              {rows?.map((row, j) => {
+                const width = (settings?.rowHeight ?? 0 * 0.5625) * (row.text?.length ?? 0);
+                return (
+                  <SplitFlapRow key={j} word={row.text} targetColor={row.color} length={col.characters} speed1={settings.initialSpeed} speed2={settings.finalSpeed} height={settings.rowHeight} width={width} fontSize={settings.rowFontSize} type={col.type} />
+                )
+              })}
             </div>
           );
         })}

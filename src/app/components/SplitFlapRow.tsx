@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import SplitFlapCharacter, { SplitFlapCharacterProps } from "./SplitFlapCharacter";
+import SplitFlapWord from "./SplitFlapWord";
 
 interface SplitFlapRowProps extends SplitFlapCharacterProps {
   word?: string;
@@ -13,9 +14,13 @@ const SplitFlapRow = (props: SplitFlapRowProps) => {
 
   return (
     <div className="flex flex-row gap-1 bg-stone-900 p-2">
-      {row.map((a, i) => (
-        <SplitFlapCharacter key={i} targetChar={word.toUpperCase()[i] ?? ""} {...props} />
-      ))}
+      {props.type === 'WORD' ? (
+        <SplitFlapWord targetWord={word} {...props} />
+      ) :
+        row.map((a, i) => (
+          <SplitFlapCharacter key={i} targetChar={word.toUpperCase()[i] ?? ""} {...props} />
+        ))
+      }
     </div>
   )
 }

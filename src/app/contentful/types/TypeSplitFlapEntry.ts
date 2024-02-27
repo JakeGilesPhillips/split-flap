@@ -3,6 +3,7 @@ import type { ChainModifiers, Entry, EntryFieldTypes, EntrySkeletonType, LocaleC
 export interface TypeSplitFlapEntryFields {
 	text?: EntryFieldTypes.Text;
 	columnId?: EntryFieldTypes.Integer;
+	color?: EntryFieldTypes.Text;
 }
 
 export type SplitFlapEntryType = "splitFlapRow";

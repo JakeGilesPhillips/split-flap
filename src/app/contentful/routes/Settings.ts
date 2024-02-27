@@ -1,10 +1,10 @@
-import { CONTENTFUL_ACCESS_TOKEN } from "@/app/models/constants";
 import { client } from "../Client";
 import { TypeSettingsEntry, TypeSettingsSkeleton } from "../types/TypeSettings";
 import { TextElement, parseContentfulTextElement, parseContentfulTextElements } from "./SplitFlapColumn";
 import { SplitFlapRow, parseContentfulSplitFlapRows } from "./SplitFlapRow";
 
 export interface Settings {
+	name?: string;
 	title?: TextElement;
 	columns?: TextElement[];
 	rows?: SplitFlapRow[];
@@ -17,6 +17,7 @@ export interface Settings {
 }
 
 export const DefaultSettings: Settings = {
+	name: '',
 	title: {  text: "DEPARTURES", fontSize: 55 },
 	columns: [],
 	rows: [],
@@ -32,6 +33,7 @@ export const parseContentfulSettings = (settings: TypeSettingsEntry): Settings |
 	if (!settings) return null;
 
 	return {
+		name: settings?.fields?.name ?? DefaultSettings.name,
 		title: parseContentfulTextElement(settings?.fields?.title) ?? DefaultSettings.title,
 		columns: parseContentfulTextElements(settings?.fields?.columns) ?? DefaultSettings.columns,
 		rows: parseContentfulSplitFlapRows(settings?.fields?.rows) ?? DefaultSettings.rows,
@@ -44,9 +46,10 @@ export const parseContentfulSettings = (settings: TypeSettingsEntry): Settings |
 	};
 };
 
-export const fetchSettings = async (): Promise<Settings> => {
+export const fetchSettings = async (name?: string): Promise<Settings> => {
 	const settingsResult = await client.getEntries<TypeSettingsSkeleton>({
 		content_type: 'settings',
+		"fields.name[match]": name,
 		order: ["-sys.createdAt"],
 		include: 2,
 	});

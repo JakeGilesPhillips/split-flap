@@ -1,11 +1,11 @@
 import type { ChainModifiers, Entry, EntryFieldTypes, EntrySkeletonType, LocaleCode } from "contentful";
 
 export interface TypeTextElementFields {
+	id?: EntryFieldTypes.Integer;
 	text?: EntryFieldTypes.Text;
 	fontSize?: EntryFieldTypes.Integer;
-	characters?: EntryFieldTypes.Integer;
 	type?: EntryFieldTypes.Text;
-	id?: EntryFieldTypes.Integer;
+	characters?: EntryFieldTypes.Integer;
 }
 
 export type TextElementType = "textElements";

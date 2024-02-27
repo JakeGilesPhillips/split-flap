@@ -2,8 +2,9 @@ import type { ChainModifiers, Entry, EntryFieldTypes, EntrySkeletonType, LocaleC
 import { TypeSplitFlapEntrySkeleton } from "./TypeSplitFlapEntry";
 
 export interface TypeSplitFlapRowFields {
-	order?: EntryFieldTypes.Integer;
+	rowName?: EntryFieldTypes.Text;
 	columns?: EntryFieldTypes.Array<EntryFieldTypes.EntryLink<TypeSplitFlapEntrySkeleton>>
+	order?: EntryFieldTypes.Integer;
 }
 
 export type SplitFlapRowType = "splitFlapRow";
