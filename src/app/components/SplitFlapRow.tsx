@@ -14,7 +14,7 @@ const SplitFlapRow = memo(({ index }: SplitFlapRowProps) => {
       </div>
       <div className="flex flex-row justify-between items-between gap-1 w-full">
         <SplitFlapWord columnName="GATE" columnKey="Room" animated={false} rowIndex={index} type='WORD' maxLength={9} date={false} />
-        <SplitFlapWord columnName="SPEAKER" columnKey="Speakers" animated={false} rowIndex={index} type='WORD' maxLength={32} date={false} />
+        <SplitFlapWord columnName="SPEAKER" columnKey="Speakers" animated={false} rowIndex={index} type='WORD' maxLength={28} date={false} />
         <SplitFlapWord columnName="START TIME" columnKey="StartTime" animated={false} rowIndex={index} maxLength={4} type={'WORD'} date={true} />
         <SplitFlapWord columnName="END TIME" columnKey="EndTime" animated={false} rowIndex={index} maxLength={4} type={'WORD'} date={true} />
       </div>
