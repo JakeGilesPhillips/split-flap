@@ -19,17 +19,16 @@ const SplitFlapString = memo(({ smoothAnim = true, columnKey = "", targetString 
   const { schedule } = useSchedule();
 
   useEffect(() => {
-    if (presetWords) return;
+    if (presetWords || !schedule) return;
     const _words = GetAlColumnRowsFromScheduleByKey(columnKey, schedule, date);
     if (!arraysEqual(_words, words)) {
       setWords(_words);
     }
-  }, [schedule]);
+  }, [date]);
 
   // Set flap animations
   const [oldFlap, animateOldFlap] = useAnimate();
   const [newFlap, animateNewFlap] = useAnimate();
-
 
   // Set animation characters
   const [words, setWords] = useState<string[]>(presetWords ?? []);
@@ -38,7 +37,7 @@ const SplitFlapString = memo(({ smoothAnim = true, columnKey = "", targetString 
   const [animating, setAnimating] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!words && oldString == '') return;
+    if (words.length == 0) return;
     setOldString(words[0]);
     setNewString(words[1]);
   }, [words]);
@@ -68,7 +67,8 @@ const SplitFlapString = memo(({ smoothAnim = true, columnKey = "", targetString 
       await animateNewFlap(newFlap.current, { rotateX: 0 }, { duration: duration * 0.5 });
     }
 
-    setOldString(newString);
+
+    if (newString) setOldString(newString || oldString || words[oldIndex]);
 
     if (smoothAnim) {
       await animateNewFlap(newFlap.current, { rotateX: 90 }, { duration: 0 });

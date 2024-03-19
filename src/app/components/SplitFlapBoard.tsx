@@ -15,7 +15,7 @@ const SplitFlapBoard = () => {
   // Set mounted state
   const [mounted, setMounted] = useState<boolean>(false);
   const { settings, setSettings } = useSettings()
-  const { schedule, setSchedule, page1, page2, page3, incrementPage1, incrementPage2, incrementPage3 } = useSchedule();
+  const { params, schedule, setSchedule, page1, page2, page3, incrementPage1, incrementPage2, incrementPage3 } = useSchedule();
 
   const _fetchSettings = async () => {
     const res = await fetchSettingsNew('departures');
@@ -24,7 +24,7 @@ const SplitFlapBoard = () => {
   }
 
   const _fetchSchedule = async () => {
-    const res = await fetchAPIData();
+    const res = await fetchAPIData(params);
     const json = await res.json();
     setSchedule(json.value);
   }
@@ -34,16 +34,6 @@ const SplitFlapBoard = () => {
     setTimeout(() => incrementPage2(), 3000);
     setTimeout(() => incrementPage3(), 6000);
   }
-
-  useEffect(() => {
-    console.log(page1);
-  }, [page1]);
-  useEffect(() => {
-    console.log(page2);
-  }, [page2]);
-  useEffect(() => {
-    console.log(page3);
-  }, [page3]);
 
   useEffect(() => {
     setMounted(true);

@@ -14,7 +14,7 @@ export interface SplitFlapCharacterProps {
 }
 
 const SplitFlapCharacter = memo(({ targetChar = '', smoothAnim = false, type = 'ALPHANUMERIC' }: SplitFlapCharacterProps) => {
-  const symbols = ["", ":", "&", "-", ","];
+  const symbols = ["", ":", "&", "-", "–", ","];
   const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
   const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
   const characters = type == 'ALPHABET' ? symbols.concat(alphabet) : type == 'NUMERIC' ? symbols.concat(numbers) : symbols.concat(alphabet.concat(numbers));

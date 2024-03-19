@@ -23,7 +23,6 @@ export const GetColumnFromScheduleByKey = (key: string, object: Schedule, date?:
 
   if (date) {
       const formatted = format(new Date(value), 'kk:mm');
-      console.log(formatted);
       return formatted;
   } else {
     if (value != null) {

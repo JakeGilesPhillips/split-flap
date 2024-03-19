@@ -5,7 +5,7 @@ import { fetchSettings } from "../contentful/routes/Settings";
 
 const Home = async ({ searchParams }: PageProps) => {
   const initialSettings = await fetchSettings('gates');
-  console.log(searchParams);
+
 
   return (
     <main className="flex flex-row justify-center items-center min-w-screen min-h-screen mono">

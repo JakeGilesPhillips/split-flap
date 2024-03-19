@@ -7,10 +7,3 @@ export async function POST(req: Request) {
 
   return Response.json(settings);
 }
-
-export async function GET() {
-  const response = await fetch('https://webapp-yarp-dab.azurewebsites.net/data-api/rest/GetMainScreenAgenda');
-  const body = await response.json();
-
-  return Response.json(body);
-}
