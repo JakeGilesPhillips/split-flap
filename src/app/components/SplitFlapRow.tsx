@@ -10,7 +10,7 @@ const SplitFlapRow = memo(({ index }: SplitFlapRowProps) => {
   return (
     <div className="flex flex-col justify-start items-start gap-2 bg-black/50 px-4 py-4 rounded-xl">
       <div className="flex flex-row justify-start items-start gap-4">
-        <SplitFlapWord columnName="SESSION" columnKey="Session" animated={false} rowIndex={index} maxLength={74} type={'ALPHANUMERIC'} />
+        <SplitFlapWord columnName="SESSION" columnKey="Session" animated={false} rowIndex={index} maxLength={72} type={'ALPHANUMERIC'} />
       </div>
       <div className="flex flex-row justify-between items-between gap-1 w-full">
         <SplitFlapWord columnName="GATE" columnKey="Room" animated={false} rowIndex={index} type='WORD' maxLength={5} />
