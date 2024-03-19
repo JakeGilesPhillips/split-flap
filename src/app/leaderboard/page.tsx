@@ -4,7 +4,7 @@ import { PageProps } from "../../../.next/types/app/page";
 import SplitFlapGates from "../components/SplitFlapGates";
 import { fetchSettings } from "../contentful/routes/Settings";
 
-const Gate = async () => {
+const Leaderboard = async () => {
   const initialSettings = await fetchSettings('gates');
 
   return (
@@ -14,4 +14,4 @@ const Gate = async () => {
   );
 }
 
-export default Gate;
+export default Leaderboard;

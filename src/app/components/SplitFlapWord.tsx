@@ -1,102 +1,68 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client"
-import { useAnimate, motion } from "framer-motion";
-import { useEffect, useMemo, useState } from "react";
+import { memo, useMemo, useState } from "react";
+import { useInterval } from "../hooks/useInterval";
+import { useSettings } from "../contexts/SettingsContext";
+import { useSchedule } from "../contexts/ScheduleContext";
 import { CharacterType } from "../contentful/routes/SplitFlapColumn";
+import { GetColumnFromScheduleByKey } from "../helpers/DataHelper";
+import SplitFlapCharacter from "./SplitFlapCharacter";
+import SplitFlapString from "./SplitFlapString";
 
 export interface SplitFlapWordProps {
-  targetWord?: string;
-  targetColor?: string;
-  speed1?: number;
-  height?: number;
-  width?: number;
-  fontSize?: number;
+  rowIndex?: number;
+  columnName?: string;
+  columnKey?: string;
+  maxLength?: number;
+  animated?: boolean;
+  justify?: string;
+  type?: CharacterType;
 }
 
-const SplitFlapWord = ({ targetWord = "TEST", targetColor, speed1 = 0.1, height = 50, width = 100, fontSize = 28 }: SplitFlapWordProps) => {
-  const zinc = "#27272a";
+const SplitFlapWord = memo((props: SplitFlapWordProps) => {
+  const { rowIndex = 0, columnKey = '', columnName = '', maxLength = 10, animated = true, justify = 'start', type = 'ALPHANUMERIC' } = props;
+  const { schedule, getPage } = useSchedule();
+  const { settings } = useSettings();
 
-  const [oldFlap, animateOldFlap] = useAnimate();
-  const [newFlap, animateNewFlap] = useAnimate();
+  const [targetWord, setTargetWord] = useState<string>("");
 
-  const [oldColor, setOldColor] = useState<string>(zinc);
-  const [newColor, setNewColor] = useState<string>(zinc);
+  const characters: string[] = useMemo(() => {
+    return new Array(maxLength).fill('');
+  }, [maxLength]);
 
-  const [oldWord, setOldWord] = useState<string>(targetWord);
-  const [newWord, setNewWord] = useState<string>(targetWord);
-
-
-  const animate = async () => {
-    // Set next word & color
-    setNewWord(targetWord);
-    setNewColor(targetColor || zinc);
-
-    // Perform flip 1
-    await animateOldFlap(oldFlap.current, { rotateX: -90 }, { duration: speed1 * 0.5, ease: 'easeIn' });
-    await animateNewFlap(newFlap.current, { rotateX: 90 }, { duration: 0 });
-    await animateNewFlap(newFlap.current, { rotateX: 0 }, { duration: speed1 * 0.5 });
-
-    // Set old word & color
-    setOldWord(targetWord);
-    setOldColor(targetColor || zinc);
-
-    // Reset
-    await animateOldFlap(oldFlap.current, { rotateX: 0 }, { duration: 0, ease: 'easeIn' });
-    await animateNewFlap(newFlap.current, { rotateX: 90 }, { duration: 0 });
+  // Check word and asign if different
+  const checkWord = () => {
+    const page = getPage(rowIndex);
+    const word = GetColumnFromScheduleByKey(columnKey, schedule[page], type == 'NUMERIC').toUpperCase();
+    if (word != targetWord) setTargetWord(word);
   }
 
-  // Update word
-  useEffect(() => {
-    if (targetWord == oldWord) return;
-    animate();
-  }, [targetWord, oldWord]);
+  // Check word every second
+  useInterval(() => {
+    checkWord();
+  }, 500);
 
-  // Update color
-  useEffect(() => {
-    if (targetColor == oldColor) return;
-    animate();
-  }, [targetColor, oldColor]);
+  // Skip if nothing to return
+  if (!settings) return <></>;
 
+  // Return character
   return (
-    <div className="relative bg-zinc-900 text-white text-center" style={{ height, fontSize, width }}>
-      <div id="TOP" className="absolute h-full w-full flex justify-center items-start" style={{ perspective: '400px' }}>
-        <motion.div id="TOP-FRONT" className="absolute w-full h-full z-10 will-change-transform" ref={oldFlap} style={{ transform: 'rotateX(0deg)' }}>
-          <div className="relative h-[50%] w-full flex justify-start items-start overflow-hidden" style={{ backgroundColor: oldColor }}>
-            <div className="relative h-[200%] w-full flex justify-center items-center">
-              <span>{oldWord}</span>
-            </div>
-          </div>
-        </motion.div>
-
-        <div id="TOP-REAR" className="absolute w-full h-full">
-          <div className="relative h-[50%] w-full flex justify-start items-start overflow-hidden" style={{ backgroundColor: newColor }}>
-            <div className="relative h-[200%] w-full flex justify-center items-center">
-              <span>{newWord}</span>
-            </div>
-          </div>
+    <div className="flex flex-col gap-0 text-white m-0">
+      <span className="pl-2 text-sql-yellow" style={{ fontSize: (settings.rowFontSize ?? 20) + 4 }}>{columnName || "‎"}</span>
+      {type == 'WORD' ? (
+        <div className="flex flex-row gap-2 p-2">
+          <SplitFlapString targetString={targetWord} columnKey={columnKey} smoothAnim={animated} maxLength={maxLength} />
         </div>
-      </div>
-
-
-      <div id="BOTTOM" className="absolute mt-[1px] h-full w-full" style={{ perspective: '400px' }}>
-        <motion.div id="BOTTOM-FRONT" className="absolute w-full h-full flex items-end z-10 will-change-transform" ref={newFlap} style={{ transform: 'rotateX(90deg)' }}>
-          <div className="relative h-[50%] w-full flex items-end overflow-hidden brightness-[85%]" style={{ backgroundColor: newColor }}>
-            <div className="relative h-[200%] w-full flex justify-center items-center">
-              <span>{newWord}</span>
-            </div>
-          </div>
-        </motion.div>
-
-        <div id="BOTTOM-REAR" className="absolute w-full h-full flex items-end">
-          <div className="relative h-[50%] w-full flex items-end overflow-hidden brightness-[85%]" style={{ backgroundColor: oldColor }}>
-            <div className="relative h-[200%] w-full flex justify-center items-center">
-              <span>{oldWord}</span>
-            </div>
-          </div>
+      ) : (
+        <div className={`flex flex-row flex-wrap justify-${justify} w-full gap-1 p-2`}>
+          {characters.map((a, i) => (
+            <SplitFlapCharacter key={i} targetChar={targetWord[i]?.trim()} smoothAnim={animated} type={type} />
+          ))}
         </div>
-      </div>
+      )}
     </div>
-  );
-}
+  )
+});
 
+SplitFlapWord.displayName = 'SplitFlapWord'
 export default SplitFlapWord;

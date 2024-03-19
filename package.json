@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@eballoi/react-use-polling": "^1.1.0",
+    "async-wait-until": "^2.0.12",
     "contentful": "^10.6.4",
+    "date-fns": "^3.6.0",
     "framer-motion": "^11.0.5",
     "next": "14.1.0",
     "react": "^18",

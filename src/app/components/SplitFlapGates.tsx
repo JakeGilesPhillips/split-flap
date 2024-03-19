@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import usePolling from "@eballoi/react-use-polling";
 
 import Logo from '../../../public/logo.png';
-import SplitFlapRow from "../components/SplitFlapRow";
+import SplitFlapRow from "./SplitFlapRow";
 import { Settings } from "../contentful/routes/Settings";
 import { GetColumnsFromRowByID } from "../helpers/DataHelper";
 import { ParseJson, fetchSettings } from "../helpers/ServerHelper";
@@ -39,7 +39,7 @@ const SplitFlapGates = ({ initialSettings }: SplitFlapGatesProps) => {
             <div className="text-white" style={{ fontSize: settings?.title?.fontSize }}>{row.rowName}</div>
             {row?.columns?.map((col, j) => {
               const parent = settings?.columns?.find((a) => a.id == col.columnId);
-              console.log(parent);
+
               return (
                 <SplitFlapRow key={i} word={col.text} targetColor={col.color} speed1={settings.initialSpeed} height={settings.rowHeight} width={settings.logoWidth} fontSize={settings.rowFontSize} type={parent?.type} />
               );

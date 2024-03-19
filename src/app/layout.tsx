@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Noto_Sans_Mono } from "next/font/google";
+import { Roboto } from "next/font/google";
 import "./globals.css";
 
-const font = Noto_Sans_Mono({ subsets: ["latin"] });
+const font = Roboto({ weight: '700', subsets: ['cyrillic'] });
 
 export const metadata: Metadata = {
   title: "Create Next App",

@@ -17,3 +17,7 @@ body {
     text-wrap: balance;
   }
 }
+
+.animating {
+  transform-style: preserve-3d;
+}

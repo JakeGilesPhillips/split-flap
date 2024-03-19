@@ -1,60 +1,94 @@
 "use client"
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import usePolling from "@eballoi/react-use-polling";
-
+import { use, useEffect, useState } from "react";
 import Logo from '../../../public/logo.png';
-import SplitFlapRow from "../components/SplitFlapRow";
-import { Settings } from "../contentful/routes/Settings";
-import { GetColumnsFromRowByID } from "../helpers/DataHelper";
-import { ParseJson, fetchSettings } from "../helpers/ServerHelper";
 
-interface SplitFlapBoardProps {
-  initialSettings: Settings;
-}
+import SplitFlapRow from "./SplitFlapRow";
+import SplitFlapClock from "./SplitFlapClock";
+import { useSchedule } from "../contexts/ScheduleContext";
+import { useSettings } from "../contexts/SettingsContext";
+import { ParseJson, fetchAPIData, fetchSettingsNew } from "../helpers/ServerHelper";
+import { useInterval } from "../hooks/useInterval";
 
-const SplitFlapBoard = ({ initialSettings }: SplitFlapBoardProps) => {
-  const [settings, setSettings] = useState<Settings>(initialSettings);
 
-  // Configure fetch function
-  const fetchData = async (): Promise<Settings> => {
-    const res = await fetchSettings('departures');
-    return ParseJson(res);
+const SplitFlapBoard = () => {
+  // Set mounted state
+  const [mounted, setMounted] = useState<boolean>(false);
+  const { settings, setSettings } = useSettings()
+  const { schedule, setSchedule, page1, page2, page3, incrementPage1, incrementPage2, incrementPage3 } = useSchedule();
+
+  const _fetchSettings = async () => {
+    const res = await fetchSettingsNew('departures');
+    const json = await ParseJson(res);
+    setSettings(json);
   }
 
-  // Start polling
-  const { data } = usePolling(fetchData, { interval: 2000 });
+  const _fetchSchedule = async () => {
+    const res = await fetchAPIData();
+    const json = await res.json();
+    setSchedule(json.value);
+  }
 
-  // Update page when data changes
+  const changePage = async () => {
+    incrementPage1();
+    await setTimeout(() => incrementPage2(), 3000);
+    await setTimeout(() => incrementPage3(), 6000);
+  }
+
   useEffect(() => {
-    if (!data) return;
-    setSettings(data);
-  }, [data]);
+    console.log(page1);
+  }, [page1]);
+  useEffect(() => {
+    console.log(page2);
+  }, [page2]);
+  useEffect(() => {
+    console.log(page3);
+  }, [page3]);
+
+  useEffect(() => {
+    setMounted(true);
+  }, [mounted]);
+
+  // Fetch data
+  useEffect(() => {
+    if (!mounted && !schedule && !settings) return;
+    _fetchSettings();
+    _fetchSchedule();
+  }, []);
+
+  useInterval(() => {
+    _fetchSchedule();
+  }, 1000 * 60 * 60)
+
+  useInterval(() => {
+    if (!schedule) return;
+    changePage();
+  }, 20000);
+
+  // Skip if nothing to return
+  if (!mounted || !settings) return <></>;
 
   return (
-    <div className="flex flex-col bg-zinc-900 px-6 pb-8 pt-4 overflow-hidden rounded-xl" style={{ scale: settings.scale }}>
-      <div className="flex flex-row justify-start items-center w-full px-3 py-6">
-        <div className="flex flex-col mr-4 overflow-hidden rounded-lg">
-          <Image src={Logo} alt="" width={settings?.logoWidth} height={settings?.logoWidth} />
+    <div className="absolute w-full h-full flex flex-col bg-sql-gray overflow-hidden" style={{ scale: 1 }}>
+      <div className="flex flex-row justify-between items-center w-full px-6 py-6 w-full bg-sql-yellow  text-black">
+        <div className="flex flex-row justify-center items-center">
+          <div className="flex flex-col justify-start items-start mr-4 overflow-hidden rounded-lg">
+            <Image src={Logo} alt="" width={settings?.logoWidth} height={settings?.logoWidth} />
+          </div>
+          <span className="px-4 text-[60pt]">{settings?.title?.text}</span>
         </div>
-        <span className="text-white px-4" style={{ fontSize: settings?.title?.fontSize }}>{settings?.title?.text}</span>
+        <div className="flex flex-col justify-center items-center">
+          <span className="px-4 text-[40pt] text-center">TIME</span>
+          <SplitFlapClock />
+        </div>
       </div>
-      <div className="flex flex-row justify-center items-center gap-10">
-        {settings?.columns?.map((col, i) => {
-          const rows = GetColumnsFromRowByID(i, settings.rows);
-          return (
-            <div key={i} className="flex flex-col justify-center items-start gap-2 p-2">
-              <span className="text-white" style={{ fontSize: col.fontSize }}>{col.text}</span>
-              {rows?.map((row, j) => {
-                const width = (settings?.rowHeight ?? 0 * 0.5625) * (row.text?.length ?? 0);
-                return (
-                  <SplitFlapRow key={j} word={row.text} targetColor={row.color} length={col.characters} speed1={settings.initialSpeed} speed2={settings.finalSpeed} height={settings.rowHeight} width={width} fontSize={settings.rowFontSize} type={col.type} />
-                )
-              })}
-            </div>
-          );
-        })}
-      </div>
+      {schedule != null && schedule.length > 0 && (
+        <div className="flex flex-col justify-start items-start gap-4 p-4 w-full">
+          <SplitFlapRow index={0} />
+          <SplitFlapRow index={1} />
+          <SplitFlapRow index={2} />
+        </div>
+      )}
     </div>
   );
 }

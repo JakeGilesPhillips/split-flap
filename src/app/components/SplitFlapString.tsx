@@ -1,53 +1,63 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 import { memo, useEffect, useState } from "react";
-import { CharacterType } from "../contentful/routes/SplitFlapColumn";
 import { useSettings } from "../contexts/SettingsContext";
-import { useAnimate } from "framer-motion";
-import waitUntil from "async-wait-until";
-import { timeout } from "../helpers/DataHelper";
+import { useAnimate, motion } from "framer-motion";
+import { useSchedule } from "../contexts/ScheduleContext";
+import { GetAlColumnRowsFromScheduleByKey, arraysEqual, timeout } from "../helpers/DataHelper";
 
-export interface SplitFlapCharacterProps {
-  targetChar?: string;
+export interface SplitFlapStringProps {
   smoothAnim?: boolean;
-  type?: CharacterType;
+  columnKey?: string;
+  targetString?: string;
+  maxLength?: number;
 }
 
-const SplitFlapCharacter = memo(({ targetChar = '', smoothAnim = false, type = 'ALPHANUMERIC' }: SplitFlapCharacterProps) => {
-  const symbols = ["", ":", "&", "-", "–"];
-  const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-  const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
-  const characters = type == 'ALPHABET' ? symbols.concat(alphabet) : type == 'NUMERIC' ? symbols.concat(numbers) : symbols.concat(alphabet.concat(numbers));
+const SplitFlapString = memo(({ smoothAnim = true, columnKey = "", targetString = "", maxLength = 10 }: SplitFlapStringProps) => {
+  const { schedule } = useSchedule();
+
+  useEffect(() => {
+    const _words = GetAlColumnRowsFromScheduleByKey(columnKey, schedule);
+    if (!arraysEqual(_words, words)) {
+      setWords(_words);
+    }
+  }, [schedule]);
 
   // Set flap animations
   const [oldFlap, animateOldFlap] = useAnimate();
   const [newFlap, animateNewFlap] = useAnimate();
 
-  // Set animation characters
-  const [animating, setAnimating] = useState<boolean>(false);
-  const [oldChar, setOldChar] = useState<string>(characters[0]);
-  const [newChar, setNewChar] = useState<string>(characters[1]);
 
-  // Start animation when targetChar changes
+  // Set animation characters
+  const [words, setWords] = useState<string[]>([]);
+  const [oldString, setOldString] = useState<string>("");
+  const [newString, setNewString] = useState<string>("");
+  const [animating, setAnimating] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!words && oldString == '') return;
+    setOldString(words[0]);
+    setNewString(words[1]);
+  }, [words]);
+
   useEffect(() => {
     _animate();
-  }, [targetChar, newChar]);
+  }, [targetString, newString]);
 
   const _animate = () => {
-    if (targetChar == oldChar || animating) return;
+    if (targetString == oldString || animating) return;
     animate();
   }
 
   // Check settings exist first
   const { settings } = useSettings();
   if (!settings) return <></>;
-  const { rowHeight, rowFontSize } = settings;
+  const { finalSpeed, rowHeight, rowFontSize } = settings;
 
-  // Animate the character
   const animate = async () => {
     setAnimating(true);
-    const oldIndex = characters.indexOf(newChar?.trim());
-    const duration = 0.1;
+    const oldIndex = words.indexOf(newString);
+    const duration = finalSpeed || 0.15;
 
     if (smoothAnim) {
       await animateOldFlap(oldFlap.current, { rotateX: -90 }, { duration: duration * 0.5, ease: 'easeIn' });
@@ -55,34 +65,34 @@ const SplitFlapCharacter = memo(({ targetChar = '', smoothAnim = false, type = '
       await animateNewFlap(newFlap.current, { rotateX: 0 }, { duration: duration * 0.5 });
     }
 
-    setOldChar(newChar);
+    setOldString(newString);
 
     if (smoothAnim) {
       await animateNewFlap(newFlap.current, { rotateX: 90 }, { duration: 0 });
       await animateOldFlap(oldFlap.current, { rotateX: 0 }, { duration: 0, ease: 'easeIn' });
     } else {
-      await timeout(10)
+      await timeout(50)
     }
 
-    setNewChar(characters[oldIndex + 1]);
+    setNewString(words[oldIndex + 1]);
     setAnimating(false);
   }
 
   return (
-    <div className="animated-character relative aspect-[2.4/3] text-white" style={{ height: rowHeight, fontSize: rowFontSize }}>
+    <div className="animated-string relative text-white w-full  tracking-widest" style={{ height: rowHeight, width: (rowHeight || 1) * maxLength, fontSize: rowFontSize }}>
       <div id="TOP" className="absolute h-full w-full flex justify-center items-start" style={{ perspective: '400px' }}>
         <div id="TOP-FRONT" className="animating absolute w-full h-full z-10 will-change-transform" ref={oldFlap} style={{ transform: 'rotateX(0deg)' }}>
           <div className="relative h-[50%] w-full flex justify-start items-start overflow-hidden bg-sql-gray">
-            <div className="relative h-[200%] w-full flex justify-center items-center">
-              <span>{oldChar}</span>
+            <div className="relative h-[200%] w-full flex justify-start items-center px-2">
+              <span>{oldString}</span>
             </div>
           </div>
         </div>
 
         <div id="TOP-REAR" className="absolute w-full h-full">
-          <div className="relative h-[50%] w-fulgl flex justify-start items-start overflow-hidden bg-sql-gray">
-            <div className="relative h-[200%] w-full flex justify-center items-center">
-              <span>{newChar}</span>
+          <div className="relative h-[50%] w-full flex justify-start items-start overflow-hidden bg-sql-gray">
+            <div className="relative h-[200%] w-full flex justify-start items-center px-2">
+              <span>{newString}</span>
             </div>
           </div>
         </div>
@@ -92,24 +102,24 @@ const SplitFlapCharacter = memo(({ targetChar = '', smoothAnim = false, type = '
       <div id="BOTTOM" className="absolute mt-[1px] h-full w-full" style={{ perspective: '400px' }}>
         <div id="BOTTOM-FRONT" className="animating absolute w-full h-full flex items-end z-10 will-change-transform" ref={newFlap} style={{ transform: 'rotateX(90deg)' }}>
           <div className="relative h-[50%] w-full flex items-end overflow-hidden brightness-[85%] bg-sql-gray">
-            <div className="relative h-[200%] w-full flex justify-center items-center">
-              <span>{newChar}</span>
+            <div className="relative h-[200%] w-full flex justify-start items-center px-2">
+              <span>{newString}</span>
             </div>
           </div>
         </div>
 
         <div id="BOTTOM-REAR" className="absolute w-full h-full flex items-end">
           <div className="relative h-[50%] w-full flex items-end overflow-hidden brightness-[85%] bg-sql-gray">
-            <div className="relative h-[200%] w-full flex justify-center items-center">
-              <span>{oldChar}</span>
+            <div className="relative h-[200%] w-full flex justify-start items-center px-2">
+              <span>{oldString}</span>
             </div>
           </div>
         </div>
-      </div >
-    </div >
+      </div>
+    </div>
   );
 });
 
-SplitFlapCharacter.displayName = 'SplitFlapCharacter';
+SplitFlapString.displayName = 'SplitFlapString';
 
-export default SplitFlapCharacter;
+export default SplitFlapString;
