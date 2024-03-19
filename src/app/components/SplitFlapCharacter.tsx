@@ -60,6 +60,8 @@ const SplitFlapCharacter = memo(({ targetChar = '', smoothAnim = false, type = '
     if (smoothAnim) {
       await animateNewFlap(newFlap.current, { rotateX: 90 }, { duration: 0 });
       await animateOldFlap(oldFlap.current, { rotateX: 0 }, { duration: 0, ease: 'easeIn' });
+    } else {
+      await timeout(100);
     }
 
     setNewChar(characters[oldIndex + 1]);
