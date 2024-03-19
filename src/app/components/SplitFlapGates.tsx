@@ -41,7 +41,7 @@ const SplitFlapGates = ({ initialSettings }: SplitFlapGatesProps) => {
               const parent = settings?.columns?.find((a) => a.id == col.columnId);
 
               return (
-                <SplitFlapRow key={i} word={col.text} targetColor={col.color} speed1={settings.initialSpeed} height={settings.rowHeight} width={settings.logoWidth} fontSize={settings.rowFontSize} type={parent?.type} />
+                <></>
               );
             })}
           </div>
