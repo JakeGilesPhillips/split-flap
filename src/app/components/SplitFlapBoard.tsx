@@ -77,10 +77,10 @@ const SplitFlapBoard = () => {
           </div>
           <span className="px-4 text-[60pt]">{settings?.title?.text}</span>
         </div>
-        <div className="flex flex-col justify-center items-center">
+        {/* <div className="flex flex-col justify-center items-center">
           <span className="px-4 text-[40pt] text-center">TIME</span>
           <SplitFlapClock />
-        </div>
+        </div> */}
       </div>
       {schedule != null && schedule.length > 0 && (
         <div className="flex flex-col justify-start items-start gap-4 p-4 w-full">
