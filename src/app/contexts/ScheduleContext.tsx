@@ -43,15 +43,15 @@ export const ScheduleProvider = ({ children, searchParams }: { children: React.R
 	const [schedule, setSchedule] = useState<Schedule[]>([]);
 
 	const incrementPage1 = () => {
-		setPage1((page1 + 3) % 14);
+		setPage1((page1 + 3) % schedule?.length || 3);
 	}
 
 	const incrementPage2 = () => {
-		setPage2((page2 + 3) % 14);
+		setPage2((page2 + 3) % schedule?.length || 3);
 	}
 
 	const incrementPage3 = () => {
-		setPage3((page3 + 3) % 14);
+		setPage3((page3 + 3) % schedule?.length || 3);
 	}
 
 	const getPage = (index: number) => {

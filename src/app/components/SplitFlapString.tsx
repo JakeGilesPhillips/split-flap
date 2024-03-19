@@ -74,7 +74,7 @@ const SplitFlapString = memo(({ smoothAnim = true, columnKey = "", targetString 
       await animateNewFlap(newFlap.current, { rotateX: 90 }, { duration: 0 });
       await animateOldFlap(oldFlap.current, { rotateX: 0 }, { duration: 0, ease: 'easeIn' });
     } else {
-      await timeout(50)
+      await timeout(100);
     }
 
     setNewString(words[oldIndex + 1]);
@@ -82,20 +82,20 @@ const SplitFlapString = memo(({ smoothAnim = true, columnKey = "", targetString 
   }
 
   return (
-    <div className="animated-string relative text-white w-full  tracking-widest" style={{ height: rowHeight, width: (rowHeight || 1) * maxLength, fontSize: rowFontSize }}>
+    <div className="animated-string relative text-white w-full tracking-widest" style={{ height: (rowHeight || 1) * 2, width: (rowHeight || 1) * maxLength, fontSize: rowFontSize }}>
       <div id="TOP" className="absolute h-full w-full flex justify-center items-start" style={{ perspective: '400px' }}>
         <div id="TOP-FRONT" className="animating absolute w-full h-full z-10 will-change-transform" ref={oldFlap} style={{ transform: 'rotateX(0deg)' }}>
           <div className="relative h-[50%] w-full flex justify-start items-start overflow-hidden bg-sql-gray">
-            <div className="relative h-[200%] w-full flex justify-start items-center px-2">
-              <span>{oldString}</span>
+            <div className="relative h-[200%] w-full flex justify-start items-center px-3">
+              <span>{oldString?.replaceAll('AND', '&')}</span>
             </div>
           </div>
         </div>
 
         <div id="TOP-REAR" className="absolute w-full h-full">
           <div className="relative h-[50%] w-full flex justify-start items-start overflow-hidden bg-sql-gray">
-            <div className="relative h-[200%] w-full flex justify-start items-center px-2">
-              <span>{newString}</span>
+            <div className="relative h-[200%] w-full flex justify-start items-center px-3">
+              <span>{newString?.replaceAll('AND', '&')}</span>
             </div>
           </div>
         </div>
@@ -105,16 +105,16 @@ const SplitFlapString = memo(({ smoothAnim = true, columnKey = "", targetString 
       <div id="BOTTOM" className="absolute mt-[1px] h-full w-full" style={{ perspective: '400px' }}>
         <div id="BOTTOM-FRONT" className="animating absolute w-full h-full flex items-end z-10 will-change-transform" ref={newFlap} style={{ transform: 'rotateX(90deg)' }}>
           <div className="relative h-[50%] w-full flex items-end overflow-hidden brightness-[85%] bg-sql-gray">
-            <div className="relative h-[200%] w-full flex justify-start items-center px-2">
-              <span>{newString}</span>
+            <div className="relative h-[200%] w-full flex justify-start items-center px-3">
+              <span>{newString?.replaceAll('AND', '&')}</span>
             </div>
           </div>
         </div>
 
         <div id="BOTTOM-REAR" className="absolute w-full h-full flex items-end">
           <div className="relative h-[50%] w-full flex items-end overflow-hidden brightness-[85%] bg-sql-gray">
-            <div className="relative h-[200%] w-full flex justify-start items-center px-2">
-              <span>{oldString}</span>
+            <div className="relative h-[200%] w-full flex justify-start items-center px-3">
+              <span>{oldString?.replaceAll('AND', '&')}</span>
             </div>
           </div>
         </div>

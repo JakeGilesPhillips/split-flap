@@ -36,7 +36,7 @@ const SplitFlapWord = memo((props: SplitFlapWordProps) => {
   const checkWord = () => {
     const page = getPage(rowIndex);
     const word = GetColumnFromScheduleByKey(columnKey, schedule[page], date).toUpperCase();
-    if (word != targetWord) setTargetWord(word.replaceAll('AND', '&'));
+    if (word != targetWord) setTargetWord(word);
   }
 
   // Check word everytime the page changes
