@@ -40,15 +40,15 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
 	const [schedule, setSchedule] = useState<Schedule[]>([]);
 
 	const incrementPage1 = () => {
-		setPage1((page1 + 1) % 14);
+		setPage1((page1 + 3) % 14);
 	}
 
 	const incrementPage2 = () => {
-		setPage2((page2 + 1) % 14);
+		setPage2((page2 + 3) % 14);
 	}
 
 	const incrementPage3 = () => {
-		setPage3((page3 + 1) % 14);
+		setPage3((page3 + 3) % 14);
 	}
 
 	const getPage = (index: number) => {

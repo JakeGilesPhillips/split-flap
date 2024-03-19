@@ -11,13 +11,16 @@ export interface SplitFlapStringProps {
   columnKey?: string;
   targetString?: string;
   maxLength?: number;
+  date?: boolean;
+  presetWords?: string[];
 }
 
-const SplitFlapString = memo(({ smoothAnim = true, columnKey = "", targetString = "", maxLength = 10 }: SplitFlapStringProps) => {
+const SplitFlapString = memo(({ smoothAnim = true, columnKey = "", targetString = "", maxLength = 10, date = false, presetWords }: SplitFlapStringProps) => {
   const { schedule } = useSchedule();
 
   useEffect(() => {
-    const _words = GetAlColumnRowsFromScheduleByKey(columnKey, schedule);
+    if (presetWords) return;
+    const _words = GetAlColumnRowsFromScheduleByKey(columnKey, schedule, date);
     if (!arraysEqual(_words, words)) {
       setWords(_words);
     }
@@ -29,7 +32,7 @@ const SplitFlapString = memo(({ smoothAnim = true, columnKey = "", targetString 
 
 
   // Set animation characters
-  const [words, setWords] = useState<string[]>([]);
+  const [words, setWords] = useState<string[]>(presetWords ?? []);
   const [oldString, setOldString] = useState<string>("");
   const [newString, setNewString] = useState<string>("");
   const [animating, setAnimating] = useState<boolean>(false);

@@ -60,8 +60,6 @@ const SplitFlapCharacter = memo(({ targetChar = '', smoothAnim = false, type = '
     if (smoothAnim) {
       await animateNewFlap(newFlap.current, { rotateX: 90 }, { duration: 0 });
       await animateOldFlap(oldFlap.current, { rotateX: 0 }, { duration: 0, ease: 'easeIn' });
-    } else {
-      await timeout(10)
     }
 
     setNewChar(characters[oldIndex + 1]);
@@ -69,7 +67,7 @@ const SplitFlapCharacter = memo(({ targetChar = '', smoothAnim = false, type = '
   }
 
   return (
-    <div className="animated-character relative aspect-[2.4/3] text-white" style={{ height: rowHeight, fontSize: rowFontSize }}>
+    <div className="animated-character relative aspect-[3/2.8] text-white" style={{ height: rowHeight, fontSize: rowFontSize }}>
       <div id="TOP" className="absolute h-full w-full flex justify-center items-start" style={{ perspective: '400px' }}>
         <div id="TOP-FRONT" className="animating absolute w-full h-full z-10 will-change-transform" ref={oldFlap} style={{ transform: 'rotateX(0deg)' }}>
           <div className="relative h-[50%] w-full flex justify-start items-start overflow-hidden bg-sql-gray">

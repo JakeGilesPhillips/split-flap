@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client"
-import { memo, useMemo, useState } from "react";
+import { memo, use, useEffect, useMemo, useState } from "react";
 import { useInterval } from "../hooks/useInterval";
 import { useSettings } from "../contexts/SettingsContext";
 import { useSchedule } from "../contexts/ScheduleContext";
@@ -17,11 +17,13 @@ export interface SplitFlapWordProps {
   animated?: boolean;
   justify?: string;
   type?: CharacterType;
+  date?: boolean;
+  words?: string[];
 }
 
 const SplitFlapWord = memo((props: SplitFlapWordProps) => {
-  const { rowIndex = 0, columnKey = '', columnName = '', maxLength = 10, animated = true, justify = 'start', type = 'ALPHANUMERIC' } = props;
-  const { schedule, getPage } = useSchedule();
+  const { rowIndex = 0, columnKey = '', columnName = '', maxLength = 10, animated = true, justify = 'start', type = 'ALPHANUMERIC', date = false, words } = props;
+  const { schedule, getPage, page1, page2, page3 } = useSchedule();
   const { settings } = useSettings();
 
   const [targetWord, setTargetWord] = useState<string>("");
@@ -33,14 +35,15 @@ const SplitFlapWord = memo((props: SplitFlapWordProps) => {
   // Check word and asign if different
   const checkWord = () => {
     const page = getPage(rowIndex);
-    const word = GetColumnFromScheduleByKey(columnKey, schedule[page], type == 'NUMERIC').toUpperCase();
+    const word = GetColumnFromScheduleByKey(columnKey, schedule[page], date).toUpperCase();
+    if (date) console.log(word)
     if (word != targetWord) setTargetWord(word);
   }
 
-  // Check word every second
-  useInterval(() => {
+  // Check word everytime the page changes
+  useEffect(() => {
     checkWord();
-  }, 500);
+  }, [page1, page2, page3])
 
   // Skip if nothing to return
   if (!settings) return <></>;
@@ -51,10 +54,10 @@ const SplitFlapWord = memo((props: SplitFlapWordProps) => {
       <span className="pl-2 text-sql-yellow" style={{ fontSize: (settings.rowFontSize ?? 20) + 4 }}>{columnName || "‎"}</span>
       {type == 'WORD' ? (
         <div className="flex flex-row gap-2 p-2">
-          <SplitFlapString targetString={targetWord} columnKey={columnKey} smoothAnim={animated} maxLength={maxLength} />
+          <SplitFlapString targetString={targetWord} columnKey={columnKey} smoothAnim={animated} maxLength={maxLength} date={date} presetWords={words} />
         </div>
       ) : (
-        <div className={`flex flex-row flex-wrap justify-${justify} w-full gap-1 p-2`}>
+        <div className={`flex flex-row flex-wrap justify-${justify} w-full gap-2 p-2`}>
           {characters.map((a, i) => (
             <SplitFlapCharacter key={i} targetChar={targetWord[i]?.trim()} smoothAnim={animated} type={type} />
           ))}

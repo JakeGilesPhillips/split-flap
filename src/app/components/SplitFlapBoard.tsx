@@ -31,8 +31,8 @@ const SplitFlapBoard = () => {
 
   const changePage = async () => {
     incrementPage1();
-    await setTimeout(() => incrementPage2(), 3000);
-    await setTimeout(() => incrementPage3(), 6000);
+    setTimeout(() => incrementPage2(), 3000);
+    setTimeout(() => incrementPage3(), 6000);
   }
 
   useEffect(() => {
@@ -58,7 +58,7 @@ const SplitFlapBoard = () => {
 
   useInterval(() => {
     _fetchSchedule();
-  }, 1000 * 60 * 60)
+  }, 1000 * 60 * 60 * 8)
 
   useInterval(() => {
     if (!schedule) return;

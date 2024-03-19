@@ -22,7 +22,9 @@ export const GetColumnFromScheduleByKey = (key: string, object: Schedule, date?:
   const value = object[key as keyof Schedule];
 
   if (date) {
-      return format(new Date(value), 'kk:mm');
+      const formatted = format(new Date(value), 'kk:mm');
+      console.log(formatted);
+      return formatted;
   } else {
     if (value != null) {
       switch (typeof value) {
@@ -34,8 +36,8 @@ export const GetColumnFromScheduleByKey = (key: string, object: Schedule, date?:
   }
 }
 
-export const GetAlColumnRowsFromScheduleByKey = (key: string, object: Schedule[]): string[] => {
-  const keys = object.map((a) => GetColumnFromScheduleByKey(key, a).toUpperCase()).sort((a, b) => a.length - b.length);
+export const GetAlColumnRowsFromScheduleByKey = (key: string, object: Schedule[], date: boolean): string[] => {
+  const keys = object.map((a) => GetColumnFromScheduleByKey(key, a, date).toUpperCase()).sort((a, b) => a.length - b.length);
   return keys;
 }
 
