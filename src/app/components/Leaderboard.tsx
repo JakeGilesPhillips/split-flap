@@ -29,14 +29,14 @@ const Leaderboard = async ({ initialScores }: LeaderboardProps) => {
 
 
   return (<div className="relative flex flex-col justify-start items-center min-w-screen min-h-screen mono bg-solarwinds text-white border">
-    <Image src={Pattern} fill objectFit="contain" alt="" className="absolute top-0 left-0 w-full h-full opacity-[10%]" />
-    <div className="absolute top-0 left-0 flex flex-col justify-center items-center h-full w-full p-8">
-      <div className="relative flex flex-col justify-center items-center w-full h-[160px] px-16 items-start">
-        <Image className="relative" src={Logo} alt="" height={200} objectFit="contain" />
+    <Image src={Pattern} fill objectFit="contain" alt="" className="absolute top-0 left-0 w-full h-full opacity-[20%]" />
+    <div className="absolute top-0 left-0 flex flex-col justify-center items-center h-full w-full p-16">
+      <div className="relative flex flex-col justify-center items-center w-full h-[560px] px-16 items-start">
+        <Image className="relative" src={Logo} alt="" height={500} objectFit="contain" />
       </div>
-      <span className="px-4 text-[30pt] font-bold">FLIGHT SIMULATOR CHALLENGE</span>
-      <span className="px-4 text-[25pt] font-medium">Can you get into our top 10?</span>
-      <div className="flex flex-col w-full h-full mt-8 p-8 bg-white overflow-hidden rounded-xl shadow-[inset_0_0px_8px_rgba(0,0,0,0.2)] gap-4">
+      <span className="px-4 text-[60pt] font-bold">FLIGHT SIMULATOR CHALLENGE</span>
+      <span className="px-4 text-[45pt] font-medium">Can you get into our top 10?</span>
+      <div className="flex flex-col w-full h-full mt-16 p-16 bg-white overflow-hidden rounded-xl shadow-[inset_0_0px_8px_rgba(0,0,0,0.2)] gap-8">
         <Image src={PatternOrange} fill objectFit="contain" alt="" className="absolute top-0 left-0 w-full h-full opacity-[10%]" />
         {leaderboard.map((a, i) => (
           <LeaderboardEntry key={i} index={i} entry={a} />

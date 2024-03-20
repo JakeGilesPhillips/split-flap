@@ -10,14 +10,14 @@ interface LeaderboardEntryProps {
 }
 const LeaderboardEntry = memo(({ index, entry }: LeaderboardEntryProps) => {
   const primary = index == 0;
-  const fontSize = primary ? 32 : index >= 10 ? 24 : 26;
-  const opacity = index >= 10 ? 0.8 : 1;
-  const fontWeight = primary ? "bold" : "medium";
+  const fontSize = primary ? 62 : index >= 10 ? 40 : 45;
+  const opacity = index >= 10 ? 0.7 : 1;
+  const fontWeight = primary ? "bold" : "light";
 
   return (
-    <div className="flex flex-row justify-center items-center w-full text-solarwinds gap-4" style={{ opacity }}>
-      <span style={{ fontSize, fontWeight }}>{index + 1}</span>
-      <div className="flex flex-row justify-between items-center w-full bg-solarwinds rounded-lg p-6 text-white">
+    <div className="flex flex-row justify-center items-center w-full p-4 text-solarwinds gap-6" style={{ opacity }}>
+      <span className="mr-10" style={{ fontSize, fontWeight }}>{index + 1}</span>
+      <div className="flex flex-row justify-between items-center w-full bg-solarwinds rounded-xl p-10 py-12 text-white">
         <span style={{ fontSize, fontWeight }}>{entry.name}</span>
         <span style={{ fontSize, fontWeight }}>{entry.score}</span>
       </div>
