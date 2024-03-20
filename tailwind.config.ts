@@ -16,6 +16,7 @@ const config: Config = {
       colors: {
         'sql-gray': "#201f1f",
         'sql-yellow': '#F7BA04',
+        'solarwinds': '#ff6202',
       }
     },
   },
