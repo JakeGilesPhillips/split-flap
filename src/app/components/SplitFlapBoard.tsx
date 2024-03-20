@@ -73,7 +73,7 @@ const SplitFlapBoard = () => {
         </div> */}
       </div>
       {schedule != null && schedule.length > 0 && (
-        <div className="flex flex-col justify-start items-start gap-4 p-4 w-full">
+        <div className="flex flex-col justify-start items-start gap-3 p-4 w-full">
           <SplitFlapRow index={0} />
           <SplitFlapRow index={1} />
           <SplitFlapRow index={2} />
