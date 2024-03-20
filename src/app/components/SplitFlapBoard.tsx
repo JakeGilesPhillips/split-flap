@@ -60,7 +60,7 @@ const SplitFlapBoard = () => {
 
   return (
     <div className="absolute w-full h-full flex flex-col bg-sql-gray overflow-hidden" style={{ scale: 1 }}>
-      <div className="flex flex-row justify-between items-center w-full px-6 py-6 w-full bg-sql-yellow  text-black">
+      <div className="flex flex-row justify-between items-center w-full px-6 py-4 w-full bg-sql-yellow  text-black">
         <div className="flex flex-row justify-center items-center">
           <div className="flex flex-col justify-start items-start mr-4 overflow-hidden rounded-lg">
             <Image src={Logo} alt="" width={settings?.logoWidth} height={settings?.logoWidth} />
