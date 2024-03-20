@@ -22,7 +22,7 @@ const Leaderboard = async () => {
         <div className="flex flex-col w-full h-full mt-8 p-8 bg-white overflow-hidden rounded-xl shadow-[inset_0_0px_8px_rgba(0,0,0,0.2)] gap-4">
           <Image src={PatternOrange} fill objectFit="contain" alt="" className="absolute top-0 left-0 w-full h-full opacity-[10%]" />
           {leaderboard.map((a, i) => (
-            <LeaderboardEntry index={i} entry={a} />
+            <LeaderboardEntry key={i} index={i} entry={a} />
           ))}
         </div>
       </div>
