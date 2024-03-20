@@ -13,3 +13,7 @@ export const fetchAPIData = async (params?: any) => {
 export const ParseJson = async (res: Response) => {
   return await res.json();
 }
+
+export const fetchLeaderboard = async () => {
+  return fetch("/api/leaderboard", { headers: { 'Content-type': 'application/json' }, method: 'GET' });
+}
