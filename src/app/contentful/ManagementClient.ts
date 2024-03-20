@@ -1,17 +1,17 @@
 import { createClient } from "contentful-management";
-import { CONTENTFUL_ACCESS_TOKEN, CONTENTFUL_SPACE_ID } from "@/app/models/constants"
+import { CONTENTFUL_MANAGEMENT_TOKEN, CONTENTFUL_SPACE_ID } from "@/app/models/constants"
 
 export const managementClient = createClient({
-	accessToken: CONTENTFUL_ACCESS_TOKEN!,
+	accessToken: CONTENTFUL_MANAGEMENT_TOKEN!,
 });
 
 export const managementNoCacheClient = createClient({
-	accessToken: CONTENTFUL_ACCESS_TOKEN!,
+	accessToken: CONTENTFUL_MANAGEMENT_TOKEN!,
 	headers: { cache: "no-store" },
 });
 
 export const managementEnvironment = async () => {
-	const space  = managementClient.getSpace(CONTENTFUL_SPACE_ID);
-	const environment = (await space).getEnvironment('master');
+	const space = await managementClient.getSpace(CONTENTFUL_SPACE_ID);
+	const environment = await space.getEnvironment('master');
 	return environment;
 }

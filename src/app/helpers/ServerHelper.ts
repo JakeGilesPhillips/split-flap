@@ -17,3 +17,7 @@ export const ParseJson = async (res: Response) => {
 export const fetchLeaderboard = async () => {
   return fetch("/api/leaderboard", { headers: { 'Content-type': 'application/json' }, method: 'GET' });
 }
+
+export const postLeaderboard = async (data: string) => {
+  return fetch("/api/leaderboard", { headers: { 'Content-type': 'application/json' }, method: 'POST', body: data });
+}

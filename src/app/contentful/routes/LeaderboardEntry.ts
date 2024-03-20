@@ -50,19 +50,18 @@ export const fetchLeaderboardEntries = async (): Promise<LeaderboardEntry[]> => 
 };
 
 export const postLeaderboardEntry = async (leaderboardEntry: LeaderboardEntry): Promise<boolean> => {
-  const id = new ShortUniqueId();
   const environment = await managementEnvironment();
   const leaderboardEntryResult = await environment.createEntry('leaderboardEntry', {
     'fields': {
       "name": {
         'en-US': leaderboardEntry.name
       },
-      "score": {
-        'en-US': leaderboardEntry.score
+      "score": { 
+        "en-US": leaderboardEntry.score
       }
     }
   });
-
+  
   if (leaderboardEntryResult) {
     const published = await leaderboardEntryResult.publish();
     if (published.isPublished()) return true;

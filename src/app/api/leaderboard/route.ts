@@ -1,4 +1,4 @@
-import { fetchLeaderboardEntries } from "@/app/contentful/routes/LeaderboardEntry";
+import { LeaderboardEntry, fetchLeaderboardEntries, postLeaderboardEntry } from "@/app/contentful/routes/LeaderboardEntry";
 
 export const revalidate = 0;
 
@@ -9,6 +9,10 @@ export async function GET() {
 
 export async function POST(req: any) {
   const reqBody = await req.json();
-  const response = await fetchLeaderboardEntries();
-  return Response.json(response);
+  const body: LeaderboardEntry = {
+    ...reqBody,
+    score: parseInt(reqBody.score)
+  }
+  const response = await postLeaderboardEntry(body);
+  return Response.json({ success: response });
 }

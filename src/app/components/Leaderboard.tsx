@@ -13,14 +13,14 @@ interface LeaderboardProps {
   initialScores: Entry[];
 }
 
-const Leaderboard = async ({ initialScores }: LeaderboardProps) => {
+const Leaderboard = ({ initialScores }: LeaderboardProps) => {
   const [leaderboard, setLeaderboard] = useState<Entry[]>(initialScores);
 
   const getScores = async () => {
     const _leaderboard = await fetchLeaderboard();
     const json = await ParseJson(_leaderboard);
-    if (!json || json?.length > 0) return;
-    setLeaderboard(leaderboard);
+    if (!json || json?.length <= 0) return;
+    setLeaderboard(json);
   };
 
   useInterval(() => {
