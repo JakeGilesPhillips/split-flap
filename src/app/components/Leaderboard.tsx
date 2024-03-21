@@ -25,7 +25,7 @@ const Leaderboard = ({ initialScores }: LeaderboardProps) => {
 
   useInterval(() => {
     getScores();
-  }, 2000);
+  }, 5000);
 
 
   return (<div className="relative flex flex-col justify-start items-center min-w-screen min-h-screen mono bg-solarwinds text-white border">
