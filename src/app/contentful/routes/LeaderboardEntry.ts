@@ -2,6 +2,7 @@ import { client } from "../Client";
 import { KeyValueMap } from "contentful-management";
 import { managementEnvironment } from "../ManagementClient";
 import { TypeLeaderboardEntryEntry, TypeLeaderboardEntrySkeleton } from "../types/TypeLeaderboardEntry";
+import { capitalize } from "@/app/helpers/DataHelper";
 
 export interface LeaderboardEntry {
   id?: string;
@@ -54,7 +55,7 @@ export const fetchLeaderboardEntries = async (): Promise<LeaderboardEntry[]> => 
 export const leaderboardEntryToFields = (leaderboardEntry: LeaderboardEntry): KeyValueMap => {
   return {
       "name": {
-        'en-US': leaderboardEntry.name
+        'en-US': capitalize(leaderboardEntry?.name || '')
       },
       "email": {
         'en-US': leaderboardEntry.email

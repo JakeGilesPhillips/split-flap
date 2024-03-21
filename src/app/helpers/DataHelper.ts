@@ -52,3 +52,11 @@ export const timeout = (delay: number) => {
 export const arraysEqual = (array1: string[], array2: string[]) => {
   return array1.length === array2.length && array1.every((value, index) => value === array2[index]);
 }
+
+export const capitalize = (str: string): string => {
+  let splitStr = str.toLowerCase().split(' ');
+  for (let i = 0; i < splitStr.length; i++) {
+      splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);     
+  }
+  return splitStr.join(' '); 
+}
