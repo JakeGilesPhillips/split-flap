@@ -1,10 +1,10 @@
-import { CONTENTFUL_SPACE_ID } from "@/app/models/constants";
 import { client } from "../Client";
+import { KeyValueMap } from "contentful-management";
 import { managementEnvironment } from "../ManagementClient";
 import { TypeLeaderboardEntryEntry, TypeLeaderboardEntrySkeleton } from "../types/TypeLeaderboardEntry";
-import ShortUniqueId from "short-unique-id";
 
 export interface LeaderboardEntry {
+  id?: string;
 	name?: string;
   email?: string;
   company?: string;
@@ -12,6 +12,7 @@ export interface LeaderboardEntry {
 }
 
 export const DefaultLeaderboardEntry: LeaderboardEntry = {
+  id: 'ABC123',
   name: 'Jake',
   email: 'jake.phillips@pytch.co.uk',
   company: 'PYTCH',
@@ -22,6 +23,7 @@ export const parseContentfulLeaderboardEntry = (leaderboardEntry: TypeLeaderboar
 	if (!leaderboardEntry) return null;
 
 	return {
+    id: leaderboardEntry?.sys.id ?? DefaultLeaderboardEntry.id,
 		name: leaderboardEntry?.fields?.name ?? DefaultLeaderboardEntry.name,
 		email: leaderboardEntry?.fields?.email ?? DefaultLeaderboardEntry.email,
 		company: leaderboardEntry?.fields?.company ?? DefaultLeaderboardEntry.company,
@@ -49,19 +51,46 @@ export const fetchLeaderboardEntries = async (): Promise<LeaderboardEntry[]> => 
 	return parsed;
 };
 
-export const postLeaderboardEntry = async (leaderboardEntry: LeaderboardEntry): Promise<boolean> => {
-  const environment = await managementEnvironment();
-  const leaderboardEntryResult = await environment.createEntry('leaderboardEntry', {
-    'fields': {
+export const leaderboardEntryToFields = (leaderboardEntry: LeaderboardEntry): KeyValueMap => {
+  return {
       "name": {
         'en-US': leaderboardEntry.name
+      },
+      "email": {
+        'en-US': leaderboardEntry.email
+      },
+      "company": {
+        'en-US': leaderboardEntry.company
       },
       "score": { 
         "en-US": leaderboardEntry.score
       }
     }
-  });
+}
+
+export const postLeaderboardEntry = async (leaderboardEntry: LeaderboardEntry): Promise<boolean> => {
+  // Create contentful environment
+  const environment = await managementEnvironment();
+
+  // Check for an existing entry under that name
+  const entries = await fetchLeaderboardEntries();
+  const existing = entries.find((a) => a.name?.toLowerCase() === leaderboardEntry.name?.toLowerCase());
   
+  // Setup result & fields
+  let leaderboardEntryResult: any =  null;
+  const fields = leaderboardEntryToFields(leaderboardEntry);
+
+  // Update or create entry
+  if (existing && existing.id) {
+    const entry = await environment.getEntry(existing.id);
+    entry.fields = fields;
+
+    leaderboardEntryResult = await entry.update();
+  } else {
+    leaderboardEntryResult = await environment.createEntry('leaderboardEntry', { 'fields': fields });
+  }
+ 
+  // Publish changes straight away
   if (leaderboardEntryResult) {
     const published = await leaderboardEntryResult.publish();
     if (published.isPublished()) return true;
