@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Manrope } from "next/font/google";
 import "./globals.css";
 
-const font = Roboto({ weight: '700', subsets: ['cyrillic'] });
+const font = Manrope({ weight: '700', subsets: ['cyrillic'] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
