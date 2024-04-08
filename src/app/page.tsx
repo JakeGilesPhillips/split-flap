@@ -1,7 +1,7 @@
 "use client"
 export const revalidate = 0;
 
-import { PageProps } from "../../.next/types/app/page";
+import { PageProps } from "../../../../.next/types/app/page";
 import SplitFlapBoard from "./components/SplitFlapBoard";
 import { ScheduleProvider } from "./contexts/ScheduleContext";
 import { SettingsProvider } from "./contexts/SettingsContext";
