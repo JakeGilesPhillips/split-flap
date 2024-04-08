@@ -1,14 +1,14 @@
 export const revalidate = 0;
 import Image from "next/image";
 
-import Logo from '../../../../public/Solarwinds.png';
-import Pattern from '../../../../public/SolarwindsPattern.png';
+import Logo from '../../../../public/PYTCHLogo.png';
+import Pattern from '../../../../public/PYTCHBackground.jpeg';
 import LeaderboardForm from "@/app/components/LeaderboardForm";
 
 const Leaderboard = async () => {
   return (
-    <main className="relative flex flex-col justify-start items-center min-w-screen min-h-screen mono bg-solarwinds text-white border">
-      <Image src={Pattern} fill objectFit="contain" alt="" className="absolute top-0 left-0 w-full h-full opacity-[20%]" />
+    <main className="relative flex flex-col justify-start items-center min-w-screen min-h-screen mono bg-black text-white border">
+      <Image src={Pattern} fill objectFit="cover" alt="" className="absolute top-0 left-0 w-full h-full opacity-[90%]" />
       <div className="absolute top-0 left-0 flex flex-col justify-between items-center w-full p-16">
         <div className="relative flex flex-col justify-center items-center w-full h-[260px] px-16 items-start">
           <Image className="relative" src={Logo} alt="" height={100} objectFit="contain" />
