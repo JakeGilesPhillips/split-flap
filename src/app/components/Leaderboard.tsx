@@ -35,7 +35,7 @@ const Leaderboard = ({ initialScores }: LeaderboardProps) => {
       </div>
       <span className="px-4 text-[22pt] font-bold">FLIGHT SIMULATOR CHALLENGE</span>
       <span className="px-4 pt-2 text-[16pt]">GET THE BEST SCORE ON THE LANDING TRAINING</span>
-      <div className="relative z-50 flex flex-col w-full h-full mt-8 p-4 bg-white/25 overflow-scroll rounded-xl shadow-[inset_0_0px_8px_rgba(0,0,0,0.2)] gap-4">
+      <div className="relative z-50 flex flex-col w-full h-full mt-8 p-4 bg-white/25 overflow-hidden rounded-xl shadow-[inset_0_0px_8px_rgba(0,0,0,0.2)] gap-4">
         {leaderboard.map((a, i) => (
           <LeaderboardEntry key={i} index={i} entry={a} />
         ))}
